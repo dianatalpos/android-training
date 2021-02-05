@@ -28,13 +28,13 @@ data class BloodPressure(
 
     fun makeInterpretation(){
         println("Systolic value: $systolicValue,  Diastolic value: $diastolicValue")
-        when{
-            systolicValue < 120 && diastolicValue < 80 -> println("Normal")
-            systolicValue in 120..129 && diastolicValue < 80 -> println("Elevated")
-            systolicValue in 130..139 || diastolicValue in 80..89 -> println ("High Blood Pressure(STAGE 1): HYPERTENSION")
-            systolicValue > 180 || diastolicValue > 120 -> println ("Hypertensive crisis: consult your doctor immediately")
-            systolicValue > 140 || diastolicValue > 90 -> println("High Blood Pressure(STAGE 2): HYPERTENSION")
-            else -> println("Invalid values")
-        }
+        println( when{
+            systolicValue < 120 && diastolicValue < 80 -> "Normal"
+            systolicValue in 120..129 && diastolicValue < 80 -> "Elevated"
+            systolicValue in 130..139 || diastolicValue in 80..89 ->"High Blood Pressure(STAGE 1): HYPERTENSION"
+            systolicValue > 180 || diastolicValue > 120 -> "Hypertensive crisis: consult your doctor immediately"
+            systolicValue > 140 || diastolicValue > 90 -> "High Blood Pressure(STAGE 2): HYPERTENSION"
+            else -> "Invalid values"
+        })
     }
 }
