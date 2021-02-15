@@ -32,12 +32,15 @@
         android:id="@+id/poi_rating_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_large"
         android:isIndicator="true"
+        android:numStars="5"
+        android:stepSize="0.1"
         android:progressTint="@color/gold"
         android:secondaryProgressTint="@color/gold"
-        app:layout_constraintEnd_toStartOf="@+id/poi_num_reviews_view"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/poi_type_view"
         tools:rating="2" />
 
     <TextView
@@ -47,8 +50,8 @@
         android:layout_marginTop="@dimen/spacing_normal"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/poi_rating_view"
-        app:layout_constraintTop_toBottomOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/poi_rating_view"
         tools:text="Review count: 5" />
 
     <Button
@@ -60,15 +63,7 @@
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/poi_rating_view" />
+        app:layout_constraintTop_toBottomOf="@+id/poi_num_reviews_view" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="@dimen/spacing_large"
-        app:layout_constraintTop_toBottomOf="@+id/poi_type_view"
-        app:layout_constraintGuide_begin="104dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
