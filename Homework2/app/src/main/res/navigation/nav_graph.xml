@@ -20,6 +20,9 @@
         android:name="com.garmin.garminkaptain.ui.PoiDetailsFragment"
         android:label="PoiDetailsFragment"
         tools:layout="@layout/poi_details_fragment">
+        <action
+            android:id="@+id/action_poiDetailsFragment_to_poiReviewsFragment"
+            app:destination="@id/poiReviewsFragment" />
         <argument
             android:name="poiId"
             android:defaultValue="-1L"
@@ -34,5 +37,29 @@
             android:id="@+id/action_poiMapFragment_to_poiDetailsFragment"
             app:destination="@id/poiDetailsFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/poiReviewsFragment"
+        android:name="com.garmin.garminkaptain.ui.PoiReviewsFragment"
+        android:label="PoiReveiwsFragment"
+        tools:layout="@layout/poi_reviews_fragment">
+        <argument
+            android:name="poiId"
+            android:defaultValue="-1L"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_poiReviewsFragment_to_poiReviewsItemTextFragment"
+            app:destination="@id/poiReviewsItemTextFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/poiReviewsItemTextFragment"
+        android:name="com.garmin.garminkaptain.ui.PoiReviewsItemTextFragment"
+        android:label="PoiReveiwsItemTextFragment"
+        tools:layout="@layout/poi_reviews_item_text_fragment">
+        <argument
+            android:name="reviewId"
+            android:defaultValue="-1L"
+            app:argType="long" />
+    </dialog>
 
 </navigation>

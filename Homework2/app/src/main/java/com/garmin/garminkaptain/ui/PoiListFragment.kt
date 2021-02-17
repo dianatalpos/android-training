@@ -11,21 +11,28 @@ import androidx.recyclerview.widget.RecyclerView
 import com.garmin.garminkaptain.R
 import com.garmin.garminkaptain.data.PointOfInterest
 import com.garmin.garminkaptain.data.poiList
+import com.garmin.garminkaptain.databinding.PoiListFragmentBinding
+import com.garmin.garminkaptain.databinding.PoiListItemBinding
+import com.garmin.garminkaptain.databinding.PoiReviewsFragmentBinding
+import com.garmin.garminkaptain.databinding.PoiReviewsItemBinding
 
-class PoiListFragment: Fragment(R.layout.poi_list_fragment) { inner class PoiListItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    private val nameView = itemView.findViewById<TextView>(R.id.poi_item_name_view)
-    private val typeView = itemView.findViewById<TextView>(R.id.poi_item_type_view)
+class PoiListFragment : Fragment(R.layout.poi_list_fragment) {
 
-    fun bind(poi: PointOfInterest) {
-        nameView.text = poi.name
-        typeView.text = poi.poiType
-        itemView.setOnClickListener {
-            findNavController().navigate(
-                PoiListFragmentDirections.actionPoiListFragmentToPoiDetailsFragment(poi.id)
-            )
+    inner class PoiListItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private lateinit var binding: PoiListItemBinding
+
+        fun bind(poi: PointOfInterest) {
+            binding = PoiListItemBinding.bind(itemView)
+
+            binding.poiItemNameView.text = poi.name
+            binding.poiItemTypeView.text = poi.poiType
+            itemView.setOnClickListener {
+                findNavController().navigate(
+                    PoiListFragmentDirections.actionPoiListFragmentToPoiDetailsFragment(poi.id)
+                )
+            }
         }
     }
-}
 
     inner class PoiListAdapter : RecyclerView.Adapter<PoiListItemViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PoiListItemViewHolder {
@@ -44,9 +51,13 @@ class PoiListFragment: Fragment(R.layout.poi_list_fragment) { inner class PoiLis
     }
 
     private val pointsOfInterest = poiList
+    private lateinit var binding: PoiListFragmentBinding
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        view.findViewById<RecyclerView>(R.id.poi_list).apply {
+        binding = PoiListFragmentBinding.bind(view)
+
+        binding.poiList.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
             adapter = PoiListAdapter()
