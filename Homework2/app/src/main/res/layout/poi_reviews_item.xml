@@ -8,12 +8,16 @@
 
     <TextView
         android:id="@+id/reviews_item_user_view"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:lines="1"
+        android:ellipsize="end"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+        android:layout_marginEnd="@dimen/spacing_small"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Anna" />
+        app:layout_constraintEnd_toEndOf="@+id/guideline"
+        tools:text="Annaaaa" />
 
     <TextView
         android:id="@+id/reviews_item_date_view"
@@ -29,7 +33,7 @@
         android:id="@+id/reviews_item_title_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/spacing_normal"
+        android:layout_marginStart="@dimen/spacing_normal"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -41,8 +45,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="106dp"
-        app:layout_constraintLeft_toRightOf="@id/reviews_item_user_view"/>
+        app:layout_constraintGuide_end="289dp"
+        app:layout_constraintLeft_toRightOf="@id/reviews_item_user_view" />
 
     <RatingBar
         android:id="@+id/reviews_item_rating_view"
@@ -63,7 +67,8 @@
         android:id="@+id/reviews_item_text_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:maxHeight="50dp"
+        android:lines="3"
+        android:ellipsize="end"
         android:layout_marginStart="@dimen/spacing_normal"
         android:layout_marginTop="@dimen/spacing_small"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"

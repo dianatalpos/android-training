@@ -5,4 +5,5 @@
     <string name="label_num_reviews">Review count: %1$d</string>
     <string name="label_list">List</string>
     <string name="label_map">Map</string>
+    <string name="title_text_review">Review\'s text</string>
 </resources>

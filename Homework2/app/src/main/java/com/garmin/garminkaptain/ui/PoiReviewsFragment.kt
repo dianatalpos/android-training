@@ -25,12 +25,10 @@ import com.garmin.garminkaptain.databinding.PoiReviewsItemBinding
 class PoiReviewsFragment : Fragment(R.layout.poi_reviews_fragment) {
 
     inner class PoiReviewsItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private lateinit var binding: PoiReviewsItemBinding
+        private var binding: PoiReviewsItemBinding = PoiReviewsItemBinding.bind(itemView)
 
 
         fun bind(review: Review) {
-            binding = PoiReviewsItemBinding.bind(itemView)
-
             binding.reviewsItemUserView.text = review.user
             binding.reviewsItemDateView.text = review.date.convertToString("dd/MM/yyyy")
             binding.reviewsItemTitleView.text = review.title

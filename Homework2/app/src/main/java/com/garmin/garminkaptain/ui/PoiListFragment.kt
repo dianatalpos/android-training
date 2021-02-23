@@ -19,11 +19,9 @@ import com.garmin.garminkaptain.databinding.PoiReviewsItemBinding
 class PoiListFragment : Fragment(R.layout.poi_list_fragment) {
 
     inner class PoiListItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private lateinit var binding: PoiListItemBinding
+        private var binding: PoiListItemBinding = PoiListItemBinding.bind(itemView)
 
         fun bind(poi: PointOfInterest) {
-            binding = PoiListItemBinding.bind(itemView)
-
             binding.poiItemNameView.text = poi.name
             binding.poiItemTypeView.text = poi.poiType
             itemView.setOnClickListener {
