@@ -3,18 +3,17 @@ package com.garmin.garminkaptain.ui
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.garmin.garminkaptain.R
 import com.garmin.garminkaptain.data.PointOfInterest
-import com.garmin.garminkaptain.data.poiList
 import com.garmin.garminkaptain.databinding.PoiListFragmentBinding
 import com.garmin.garminkaptain.databinding.PoiListItemBinding
-import com.garmin.garminkaptain.databinding.PoiReviewsFragmentBinding
-import com.garmin.garminkaptain.databinding.PoiReviewsItemBinding
+import com.garmin.garminkaptain.viewModel.PoiViewModel
 
 class PoiListFragment : Fragment(R.layout.poi_list_fragment) {
 
@@ -48,8 +47,11 @@ class PoiListFragment : Fragment(R.layout.poi_list_fragment) {
         override fun getItemCount(): Int = pointsOfInterest.size
     }
 
-    private val pointsOfInterest = poiList
     private lateinit var binding: PoiListFragmentBinding
+
+    private var pointsOfInterest = listOf<PointOfInterest>()
+    private var adapter = PoiListAdapter()
+    private val viewModel: PoiViewModel by activityViewModels()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,8 +60,15 @@ class PoiListFragment : Fragment(R.layout.poi_list_fragment) {
         binding.poiList.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
-            adapter = PoiListAdapter()
+            adapter =this@PoiListFragment.adapter
         }
+
+        viewModel.getPoiList().observe(viewLifecycleOwner, Observer {
+            it?.let {
+                pointsOfInterest = it
+                adapter.notifyDataSetChanged()
+            }
+        })
     }
 
 }
