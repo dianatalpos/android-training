@@ -60,7 +60,7 @@ class PoiListFragment : Fragment(R.layout.poi_list_fragment) {
         binding.poiList.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
-            adapter =this@PoiListFragment.adapter
+            adapter = this@PoiListFragment.adapter
         }
 
         viewModel.getPoiList().observe(viewLifecycleOwner, Observer {

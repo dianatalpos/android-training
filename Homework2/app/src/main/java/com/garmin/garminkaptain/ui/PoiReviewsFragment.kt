@@ -1,15 +1,11 @@
 package com.garmin.garminkaptain.ui
 
 import android.os.Bundle
-import android.text.method.ScrollingMovementMethod
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
-import android.widget.PopupWindow
-import android.widget.RatingBar
-import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,9 +14,9 @@ import com.garmin.garminkaptain.R
 import com.garmin.garminkaptain.convertToString
 import com.garmin.garminkaptain.data.PointOfInterest
 import com.garmin.garminkaptain.data.Review
-import com.garmin.garminkaptain.data.poiList
 import com.garmin.garminkaptain.databinding.PoiReviewsFragmentBinding
 import com.garmin.garminkaptain.databinding.PoiReviewsItemBinding
+import com.garmin.garminkaptain.viewModel.PoiViewModel
 
 class PoiReviewsFragment : Fragment(R.layout.poi_reviews_fragment) {
 
@@ -59,22 +55,28 @@ class PoiReviewsFragment : Fragment(R.layout.poi_reviews_fragment) {
 
     private val args: PoiReviewsFragmentArgs by navArgs()
     private lateinit var binding: PoiReviewsFragmentBinding
-    private lateinit var reviews : List<Review>
+
+    private var reviews = listOf<Review>()
+    private var adapter = PoiReviewsAdapter()
+    private val viewModel: PoiViewModel by activityViewModels()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = PoiReviewsFragmentBinding.bind(view)
 
         val poiId = args.poiId
-        val poi = poiList.find { it.id == poiId }
-        poi?.let {
-            reviews = it.reviews
-        }
 
         binding.reviewsList.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
-            adapter = PoiReviewsAdapter()
+            adapter = this@PoiReviewsFragment.adapter
         }
+
+        viewModel.getReviewsList(poiId).observe(viewLifecycleOwner, Observer {
+            it?.let {
+                reviews = it
+                adapter.notifyDataSetChanged()
+            }
+        })
     }
 }

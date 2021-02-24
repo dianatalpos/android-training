@@ -7,4 +7,6 @@ object PoiRepository {
     fun getPoiList() = poiList
 
     fun getPoi(id: Long) = poiList.find {it.id == id}
+
+    fun getPoiReviews(id: Long) = poiList.find {it.id == id}?.reviews
 }
