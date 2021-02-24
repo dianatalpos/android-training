@@ -1,13 +1,13 @@
 package com.garmin.garminkaptain.viewModel
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.garmin.garminkaptain.data.PointOfInterest
 import com.garmin.garminkaptain.model.PoiRepository
 import com.garmin.garminkaptain.TAG
 import com.garmin.garminkaptain.data.Review
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class PoiViewModel : ViewModel() {
     init {
@@ -18,18 +18,14 @@ class PoiViewModel : ViewModel() {
         MutableLiveData<List<PointOfInterest>>()
     }
 
-    private val poiLiveData: MutableLiveData<PointOfInterest> by lazy {
-        MutableLiveData<PointOfInterest>()
+    private val loadingLiveData: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
     }
 
     private val poiReviewsLiveData: MutableLiveData<List<Review>> by lazy {
         MutableLiveData<List<Review>>()
     }
 
-    fun getPoi(id: Long): LiveData<PointOfInterest> {
-        loadPoi(id)
-        return poiLiveData
-    }
 
     fun getPoiList(): LiveData<List<PointOfInterest>> {
         loadPoiList()
@@ -45,12 +41,25 @@ class PoiViewModel : ViewModel() {
         poiReviewsLiveData.postValue(PoiRepository.getPoiReviews(poiId))
     }
 
-    private fun loadPoiList() {
-        poiListLiveData.postValue(PoiRepository.getPoiList())
+    fun getPoi(id: Long): LiveData<PointOfInterest?> = liveData {
+        loadingLiveData.postValue(true)
+        PoiRepository.getPoi(id).collect {
+            emit(it)
+            loadingLiveData.postValue(false)
+        }
     }
 
-    private fun loadPoi(id: Long) {
-        poiLiveData.postValue(PoiRepository.getPoi(id))
+
+    fun getLoading(): LiveData<Boolean> = loadingLiveData
+
+    fun loadPoiList() {
+        loadingLiveData.postValue(true)
+        viewModelScope.launch {
+            PoiRepository.getPoiList().collect {
+                poiListLiveData.postValue(it)
+                loadingLiveData.postValue(false)
+            }
+        }
     }
 
     override fun onCleared() {

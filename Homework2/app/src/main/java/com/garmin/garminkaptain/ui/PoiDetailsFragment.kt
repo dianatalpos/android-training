@@ -5,12 +5,16 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.constraintlayout.widget.Group
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.garmin.garminkaptain.R
@@ -24,9 +28,10 @@ class PoiDetailsFragment : Fragment() {
 
     private val args: PoiDetailsFragmentArgs by navArgs()
     private lateinit var binding: PoiDetailsFragment2Binding
-    private val viewModel: PoiViewModel by activityViewModels()
+    private val viewModel: PoiViewModel by viewModels()
 
-
+    private lateinit var progressBar: ProgressBar
+    private lateinit var group: Group
     private lateinit var nameTextView: TextView
     private lateinit var typeTextView: TextView
     private lateinit var ratingTextView: RatingBar
@@ -61,15 +66,23 @@ class PoiDetailsFragment : Fragment() {
             ratingTextView = binding.poiRatingView
             numReviewsTextView = binding.poiNumReviewsView
             reviewsButton = binding.poiViewReviewsButton
+            progressBar = binding.poiProgress
+            group = binding.poiDetailsGroup
         }
 
         Log.d(TAG, "onViewCreated: called")
         val poiId = args.poiId
         val poi = poiList.find { it.id == poiId }
 
+        viewModel.getLoading().observe(
+            viewLifecycleOwner,
+            Observer {
+                progressBar.visibility = if (it) VISIBLE else GONE
+            })
 
         viewModel.getPoi(args.poiId).observe(viewLifecycleOwner, Observer { poi ->
             poi?.let {
+                group.visibility = VISIBLE
                 nameTextView.text = poi.name
                 typeTextView.text = poi.poiType
                 ratingTextView.rating =  poi.reviewSummary.averageRating.toFloat()
