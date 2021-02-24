@@ -6,6 +6,7 @@ import com.garmin.garminkaptain.data.PointOfInterest
 import com.garmin.garminkaptain.model.PoiRepository
 import com.garmin.garminkaptain.TAG
 import com.garmin.garminkaptain.data.Review
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -53,11 +54,15 @@ class PoiViewModel : ViewModel() {
     fun getLoading(): LiveData<Boolean> = loadingLiveData
 
     fun loadPoiList() {
-        loadingLiveData.postValue(true)
         viewModelScope.launch {
-            PoiRepository.getPoiList().collect {
-                poiListLiveData.postValue(it)
-                loadingLiveData.postValue(false)
+            while(true) {
+                loadingLiveData.postValue(true)
+                Log.d(TAG, "Load data")
+                PoiRepository.getPoiList().collect {
+                    poiListLiveData.postValue(it)
+                    loadingLiveData.postValue(false)
+                }
+                delay(5000)
             }
         }
     }
