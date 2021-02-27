@@ -12,6 +12,8 @@ import kotlinx.coroutines.flow.collect
 
 class PoiViewModel(application: Application) : AndroidViewModel(application) {
 
+    private val poiRepository : PoiRepository = PoiRepository(application)
+
     init{
         val scope = CoroutineScope(Job() + Dispatchers.Default)
 
@@ -43,7 +45,7 @@ class PoiViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getPoi(id: Long): LiveData<PointOfInterest?> = liveData {
         loadingLiveData.postValue(true)
-        PoiRepository.getPoi(getApplication(), id).collect {
+       poiRepository.getPoi(getApplication(), id).collect {
             emit(it)
             loadingLiveData.postValue(false)
         }
@@ -55,7 +57,7 @@ class PoiViewModel(application: Application) : AndroidViewModel(application) {
     fun loadPoiList() {
         loadingLiveData.postValue(true)
         viewModelScope.launch {
-            PoiRepository.getPoiList(getApplication()).collect {
+            poiRepository.getPoiList(getApplication()).collect {
                 poiListLiveData.postValue(it)
                 loadingLiveData.postValue(false)
             }

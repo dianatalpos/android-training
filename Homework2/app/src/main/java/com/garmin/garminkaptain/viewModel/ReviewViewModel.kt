@@ -9,6 +9,8 @@ import kotlinx.coroutines.launch
 
 class ReviewViewModel(application: Application) : AndroidViewModel(application) {
 
+    private val poiRepository: PoiRepository = PoiRepository(application)
+
     private val _reviewsLiveData: MutableLiveData<List<Review>> = MutableLiveData()
     private val _reviewLiveData: MutableLiveData<Review> = MutableLiveData()
 
@@ -19,11 +21,11 @@ class ReviewViewModel(application: Application) : AndroidViewModel(application) 
         get() = _reviewLiveData
 
     fun getReviews(id: Long) = viewModelScope.launch {
-        _reviewsLiveData.postValue(PoiRepository.getReviews(getApplication(), id))
+        _reviewsLiveData.postValue(poiRepository.getReviews(getApplication(), id))
     }
 
     fun getReview(poiId: Long, reviewId: Long) = viewModelScope.launch {
         _reviewLiveData.postValue(
-            PoiRepository.getReviews(getApplication(), poiId).find { it.id == reviewId })
+            poiRepository.getReviews(getApplication(), poiId).find { it.id == reviewId })
     }
 }
