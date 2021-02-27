@@ -4,19 +4,16 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.garmin.garminkaptain.R
-import com.garmin.garminkaptain.convertToString
-import com.garmin.garminkaptain.data.PointOfInterest
 import com.garmin.garminkaptain.data.Review
 import com.garmin.garminkaptain.databinding.PoiReviewsFragmentBinding
 import com.garmin.garminkaptain.databinding.PoiReviewsItemBinding
-import com.garmin.garminkaptain.viewModel.PoiViewModel
+import com.garmin.garminkaptain.viewModel.ReviewViewModel
 
 class PoiReviewsFragment : Fragment(R.layout.poi_reviews_fragment) {
 
@@ -26,18 +23,20 @@ class PoiReviewsFragment : Fragment(R.layout.poi_reviews_fragment) {
 
         fun bind(review: Review) {
             binding.reviewsItemUserView.text = review.user
-            binding.reviewsItemDateView.text = review.date.convertToString("dd/MM/yyyy")
+            binding.reviewsItemDateView.text = review.date
             binding.reviewsItemTitleView.text = review.title
             binding.reviewsItemRatingView.rating = review.rating.toFloat()
             binding.reviewsItemTextView.text = review.text
 
             itemView.setOnClickListener{
-                findNavController().navigate(PoiReviewsFragmentDirections.actionPoiReviewsFragmentToPoiReviewsItemTextFragment(review.id))
+                findNavController().navigate(PoiReviewsFragmentDirections.actionPoiReviewsFragmentToPoiReviewsItemTextFragment(review.poiId,review.id))
             }
         }
     }
 
     inner class PoiReviewsAdapter : RecyclerView.Adapter<PoiReviewsFragment.PoiReviewsItemViewHolder>() {
+        private var reviews = listOf<Review>()
+
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PoiReviewsFragment.PoiReviewsItemViewHolder {
             return PoiReviewsItemViewHolder(
                 layoutInflater.inflate(R.layout.poi_reviews_item, parent, false)
@@ -51,14 +50,17 @@ class PoiReviewsFragment : Fragment(R.layout.poi_reviews_fragment) {
         }
 
         override fun getItemCount(): Int = reviews.size
+
+        fun updateData(reviewsList: List<Review>) {
+            reviews= reviewsList
+            notifyDataSetChanged()
+        }
     }
-
     private val args: PoiReviewsFragmentArgs by navArgs()
-    private lateinit var binding: PoiReviewsFragmentBinding
 
-    private var reviews = listOf<Review>()
+    private lateinit var binding: PoiReviewsFragmentBinding
     private var adapter = PoiReviewsAdapter()
-    private val viewModel: PoiViewModel by activityViewModels()
+    private val model: ReviewViewModel by viewModels()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -72,11 +74,10 @@ class PoiReviewsFragment : Fragment(R.layout.poi_reviews_fragment) {
             adapter = this@PoiReviewsFragment.adapter
         }
 
-        viewModel.getReviewsList(poiId).observe(viewLifecycleOwner, Observer {
-            it?.let {
-                reviews = it
-                adapter.notifyDataSetChanged()
-            }
+        model.reviewLiveData.observe(viewLifecycleOwner, {
+            adapter.updateData(it)
         })
+
+        model.getReviews(args.poiId)
     }
 }

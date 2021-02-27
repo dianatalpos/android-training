@@ -2,14 +2,12 @@ package com.garmin.garminkaptain.ui
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.doOnLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.garmin.garminkaptain.R
 import com.garmin.garminkaptain.data.PointOfInterest
-import com.garmin.garminkaptain.data.poiList
 import com.garmin.garminkaptain.viewModel.PoiViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap

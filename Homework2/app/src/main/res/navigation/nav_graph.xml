@@ -56,7 +56,12 @@
         android:name="com.garmin.garminkaptain.ui.PoiReviewsItemTextFragment"
         android:label="PoiReveiwsItemTextFragment">
         <argument
-            android:name="reviewId"
+        android:name="reviewId"
+        android:defaultValue="-1L"
+        app:argType="long" />
+
+        <argument
+            android:name="poiId"
             android:defaultValue="-1L"
             app:argType="long" />
     </dialog>

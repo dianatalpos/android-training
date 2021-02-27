@@ -1,21 +1,29 @@
 package com.garmin.garminkaptain.viewModel
 
+import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
 import com.garmin.garminkaptain.data.PointOfInterest
 import com.garmin.garminkaptain.model.PoiRepository
 import com.garmin.garminkaptain.TAG
 import com.garmin.garminkaptain.data.Review
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
-class PoiViewModel : ViewModel() {
-    init {
-        Log.d(TAG, "init called")
+class PoiViewModel(application: Application) : AndroidViewModel(application) {
+
+    init{
+        val scope = CoroutineScope(Job() + Dispatchers.Default)
+
+        scope.launch {
+            while (true) {
+                delay(5000)
+                Log.d(TAG, "Load data")
+                loadPoiList()
+            }
+        }
     }
-
-    private val poiListLiveData: MutableLiveData<List<PointOfInterest>> by lazy{
+    private val poiListLiveData: MutableLiveData<List<PointOfInterest>> by lazy {
         MutableLiveData<List<PointOfInterest>>()
     }
 
@@ -33,36 +41,23 @@ class PoiViewModel : ViewModel() {
         return poiListLiveData
     }
 
-    fun getReviewsList(poiId: Long): LiveData<List<Review>> {
-        loadPoiReviews(poiId)
-        return poiReviewsLiveData
-    }
-
-    private fun loadPoiReviews(poiId: Long) {
-        poiReviewsLiveData.postValue(PoiRepository.getPoiReviews(poiId))
-    }
-
     fun getPoi(id: Long): LiveData<PointOfInterest?> = liveData {
         loadingLiveData.postValue(true)
-        PoiRepository.getPoi(id).collect {
+        PoiRepository.getPoi(getApplication(), id).collect {
             emit(it)
             loadingLiveData.postValue(false)
         }
-    }
 
+    }
 
     fun getLoading(): LiveData<Boolean> = loadingLiveData
 
     fun loadPoiList() {
+        loadingLiveData.postValue(true)
         viewModelScope.launch {
-            while(true) {
-                loadingLiveData.postValue(true)
-                Log.d(TAG, "Load data")
-                PoiRepository.getPoiList().collect {
-                    poiListLiveData.postValue(it)
-                    loadingLiveData.postValue(false)
-                }
-                delay(5000)
+            PoiRepository.getPoiList(getApplication()).collect {
+                poiListLiveData.postValue(it)
+                loadingLiveData.postValue(false)
             }
         }
     }
