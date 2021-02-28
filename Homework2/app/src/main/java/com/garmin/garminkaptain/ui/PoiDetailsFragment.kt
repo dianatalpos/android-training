@@ -72,7 +72,6 @@ class PoiDetailsFragment : Fragment() {
 
         Log.d(TAG, "onViewCreated: called")
         val poiId = args.poiId
-        val poi = poiList.find { it.id == poiId }
 
         viewModel.getLoading().observe(
             viewLifecycleOwner,
@@ -83,14 +82,14 @@ class PoiDetailsFragment : Fragment() {
         viewModel.getPoi(args.poiId).observe(viewLifecycleOwner, Observer { poi ->
             poi?.let {
                 group.visibility = VISIBLE
-                nameTextView.text = poi.name
-                typeTextView.text = poi.poiType
+                nameTextView.text = poi.poi.name
+                typeTextView.text = poi.poi.poiType
                 ratingTextView.rating =  poi.reviewSummary.averageRating.toFloat()
                 numReviewsTextView.text =  getString(R.string.label_rating, poi.reviewSummary.averageRating)
                 reviewsButton.isEnabled =poi.reviewSummary.numberOfReviews > 0
                 reviewsButton.setOnClickListener {
                     findNavController().navigate(
-                        PoiDetailsFragmentDirections.actionPoiDetailsFragmentToPoiReviewsFragment(poi.id)
+                        PoiDetailsFragmentDirections.actionPoiDetailsFragmentToPoiReviewsFragment(poi.poi.id)
                     )
                 }
             }

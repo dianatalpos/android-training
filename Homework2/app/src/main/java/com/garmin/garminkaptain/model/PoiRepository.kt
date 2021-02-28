@@ -4,7 +4,7 @@ import android.app.Application
 import com.garmin.garminkaptain.KaptainApplication
 import com.garmin.garminkaptain.data.PoiDao
 import com.garmin.garminkaptain.data.PoiDatabase
-import com.garmin.garminkaptain.data.PointOfInterest
+import com.garmin.garminkaptain.data.PoiWithMapLocationAndReviewSummary
 import kotlinx.coroutines.flow.Flow
 
 class PoiRepository(application: Application) {
@@ -15,12 +15,12 @@ class PoiRepository(application: Application) {
         dao = PoiDatabase.getInstance(application).getPoiDao()
     }
 
-    fun getPoiList(application: KaptainApplication): Flow<List<PointOfInterest>> =
-        dao.getAllPoi()
+    fun getPoiList(application: KaptainApplication): Flow<List<PoiWithMapLocationAndReviewSummary>> =
+        dao.getAllPoiWithReviewSummaryAndMapLocation()
 
 
-    fun getPoi(application: KaptainApplication, id: Long): Flow<PointOfInterest> =
-        dao.getPoi(id)
+    fun getPoi(application: KaptainApplication, id: Long): Flow<PoiWithMapLocationAndReviewSummary> =
+        dao.getPoiWithReviewSummaryAndMapLocation(id)
 
     suspend fun getReviews(application: KaptainApplication, id: Long) =
         dao.getPoiWithReviews(id).reviews

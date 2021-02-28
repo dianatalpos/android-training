@@ -9,8 +9,8 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.garmin.garminkaptain.R
+import com.garmin.garminkaptain.data.PoiWithMapLocationAndReviewSummary
 import com.garmin.garminkaptain.data.PointOfInterest
 import com.garmin.garminkaptain.databinding.PoiListFragmentBinding
 import com.garmin.garminkaptain.databinding.PoiListItemBinding
@@ -41,7 +41,7 @@ class PoiListFragment : Fragment(R.layout.poi_list_fragment) {
 
         override fun onBindViewHolder(holder: PoiListItemViewHolder, position: Int) {
             pointsOfInterest.getOrNull(position)?.let {
-                holder.bind(it)
+                holder.bind(it.poi)
             }
         }
 
@@ -50,7 +50,7 @@ class PoiListFragment : Fragment(R.layout.poi_list_fragment) {
 
     private lateinit var binding: PoiListFragmentBinding
 
-    private var pointsOfInterest = listOf<PointOfInterest>()
+    private var pointsOfInterest = listOf<PoiWithMapLocationAndReviewSummary>()
     private var adapter = PoiListAdapter()
     private val viewModel: PoiViewModel by activityViewModels()
 
