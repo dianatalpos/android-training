@@ -65,6 +65,13 @@ class PoiViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun deletePoi(id: Long){
+        viewModelScope.launch {
+            poiRepository.deletePoi(id)
+        }
+        //loadPoiList()
+    }
+
     override fun onCleared() {
         super.onCleared()
         Log.d(TAG, "onCleared() called")

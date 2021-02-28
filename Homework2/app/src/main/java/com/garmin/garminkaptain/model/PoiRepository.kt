@@ -24,4 +24,8 @@ class PoiRepository(application: Application) {
 
     suspend fun getReviews(application: KaptainApplication, id: Long) =
         dao.getPoiWithReviews(id).reviews
+
+    suspend fun deletePoi(id:Long) {
+        dao.deletePoiById(id)
+    }
 }

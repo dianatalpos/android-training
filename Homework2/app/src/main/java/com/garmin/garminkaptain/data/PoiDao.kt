@@ -41,4 +41,8 @@ interface PoiDao {
     @Transaction
     @Query("SELECT * from poi_table WHERE id=:id")
     fun getPoiWithReviewSummaryAndMapLocation(id: Long): Flow<PoiWithMapLocationAndReviewSummary>
+
+    @Transaction
+    @Query("DELETE FROM poi_table WHERE id=:id")
+    suspend fun deletePoiById(id: Long)
 }
