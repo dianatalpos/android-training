@@ -16,9 +16,7 @@ class PoiViewModel(application: Application) : AndroidViewModel(application) {
     private val poiRepository : PoiRepository = PoiRepository(application)
 
     init{
-        val scope = CoroutineScope(Job() + Dispatchers.Default)
-
-        scope.launch {
+        viewModelScope.launch {
             while (true) {
                 delay(5000)
                 Log.d(TAG, "Load data")
@@ -26,6 +24,7 @@ class PoiViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
+
     private val poiListLiveData: MutableLiveData<List<PoiWithMapLocationAndReviewSummary>> by lazy {
         MutableLiveData<List<PoiWithMapLocationAndReviewSummary>>()
     }
